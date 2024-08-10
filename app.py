@@ -155,4 +155,4 @@ elif medal_type == "Bronze":
     st.plotly_chart(fig)
 
 # Display the filtered DataFrame
-st.dataframe(filtered_df)
+#st.dataframe(filtered_df)
