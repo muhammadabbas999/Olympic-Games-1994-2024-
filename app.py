@@ -7,7 +7,7 @@ import streamlit as st
 import plotly.express as px
 import plotly as pt
 # Set page configuration
-st.set_page_config(page_title="Olympic Games 1994-2024", layout="wide")
+st.set_page_config(page_title="Olympic Games 1994-2024", layout="centered")
 
 # Title of the app
 st.markdown("""
