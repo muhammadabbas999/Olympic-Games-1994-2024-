@@ -1,11 +1,8 @@
-
-
-
-
 import pandas as pd
 import streamlit as st
 import plotly.express as px
 import plotly as pt
+
 # Set page configuration
 st.set_page_config(page_title="Olympic Games 1994-2024", layout="centered")
 
@@ -14,29 +11,67 @@ st.markdown("""
     <h1 style='text-align: center; color: #FFFFFF; font-family: Arial, sans-serif; font-size: 40px;'>Olympic Games 1994-2024</h1>
     """, unsafe_allow_html=True)
 
-# Custom CSS for sidebar and text
+# Custom CSS for styling
 st.markdown("""
     <style>
-    .css-1d391kg { /* Sidebar background color */
-        background-color: #13465F;
+    /* Main background color */
+    .stApp {
+        background-color: #8E7D13; /* Main background color */
     }
-    .css-1d391kg .css-1to83wi { /* Sidebar header color */
-        color: white;
+
+    /* Sidebar background color */
+    [data-testid="stSidebar"] {
+        background-color: #625610 !important; /* Sidebar background color */
     }
-    .css-1d391kg .css-1n14jix { /* Sidebar text color */
-        color: white;
+
+    /* Sidebar text color (including selectbox and radio options) */
+    .css-1d391kg .css-1lcbmhc,  /* This targets selectbox and radio button labels */
+    .css-1d391kg .css-1hbv2ka {  /* This targets the selected option text */
+        color: white !important;
     }
-    .css-1d391kg .css-1d9dfdk { /* Sidebar input text color */
-        color: white;
+
+    /* Sidebar selectbox label color */
+    [data-testid="stSidebar"] label {
+        color: white !important; /* Dropdown label color */
     }
-    h1, h2, h3, h4, h5, h6, .css-1v3fvcr {
+
+    /* Sidebar header color */
+    [data-testid="stSidebar"] .css-1d391kg .css-1to83wi {
+        color: white !important; /* Sidebar header color */
+    }
+
+    /* General text color */
+    .stApp .css-1v3fvcr, .stApp .css-1d9dfdk {
+        color: white !important; /* General text color */
+    }
+
+    /* Title font weight */
+    h1, h2, h3, h4, h5, h6 {
         font-weight: bold;
     }
+
+    /* Override radio button text color */
+    .css-1v3fvcr, .css-1n14jix {
+        color: white !important;
+    }
+
+    /* Ensure the sidebar header is also white */
+    .css-1d391kg .css-1to83wi {
+        color: white !important;
+    }
+
+    /* Legend text color for Plotly charts */
+    .plotly .legend {
+        color: white !important; /* Legend text color */
+    }
+
     </style>
     """, unsafe_allow_html=True)
 
 # Sidebar for filtering
-st.sidebar.header("Please Filter Here")
+st.sidebar.markdown(
+    "<h2 style='color: white;'>Please Filter Here</h2>", unsafe_allow_html=True
+)
 
 # Dictionary to map the selection to the corresponding dataset
 datasets = {
@@ -70,16 +105,20 @@ medal_type = st.sidebar.radio("Select Medal Type", ["Gold", "Silver", "Bronze"])
 if medal_type == "Gold":
     filtered_df = df[df['Gold'] > 0]
     # Create the bar chart for Gold medals
-    fig = px.bar(filtered_df, x='NOC', y='Gold', color='NOC', text='Gold',color_discrete_sequence=px.colors.qualitative.Vivid)
+    fig = px.bar(filtered_df, x='NOC', y='Gold', color='NOC', text='Gold', color_discrete_sequence=px.colors.qualitative.Vivid)
     fig.update_layout(
-     #   title_text=f"{selected_game}: Gold Medal Count by NOC",
-        #title_font=dict(size=20, family='Arial, sans-serif', color='black'),
+        plot_bgcolor='#8E7D13',  # Background color of the plot area
+        paper_bgcolor='#8E7D13',  # Background color of the whole figure
         xaxis_title='Countries',
         xaxis_title_font=dict(size=18, family='Arial, sans-serif', color='white'),
         yaxis_title='Gold Medals',
         yaxis_title_font=dict(size=18, family='Arial, sans-serif', color='white'),
         xaxis_tickfont=dict(size=12, family='Arial, sans-serif', color='white'),
         yaxis_tickfont=dict(size=12, family='Arial, sans-serif', color='white'),
+                        legend=dict(
+            title_font=dict(size=14, family='Arial, sans-serif', color='white'),
+            font=dict(size=12, family='Arial, sans-serif', color='white')
+        ),
         annotations=[
             dict(
                 x=0.55,
@@ -93,22 +132,26 @@ if medal_type == "Gold":
             )
         ]
     )
-    fig.update_traces(textfont=dict(family='Arial, sans-serif', size=12, color='black'))
+    fig.update_traces(textfont=dict(family='Arial, sans-serif', size=12, color='white'))
     st.plotly_chart(fig)
 
 elif medal_type == "Silver":
     filtered_df = df[df['Silver'] > 0]
     # Create the bar chart for Silver medals
-    fig = px.bar(filtered_df, x='NOC', y='Silver', color='NOC', text='Silver',color_discrete_sequence=px.colors.qualitative.Bold)
+    fig = px.bar(filtered_df, x='NOC', y='Silver', color='NOC', text='Silver', color_discrete_sequence=px.colors.qualitative.Bold)
     fig.update_layout(
-        #title_text=f"{selected_game}: Silver Medal Count by NOC",
-        #title_font=dict(size=20, family='Arial, sans-serif', color='black'),
+        plot_bgcolor='#8E7D13',  # Background color of the plot area
+        paper_bgcolor='#8E7D13',  # Background color of the whole figure
         xaxis_title='Countries',
         xaxis_title_font=dict(size=18, family='Arial, sans-serif', color='white'),
         yaxis_title='Silver Medals',
         yaxis_title_font=dict(size=18, family='Arial, sans-serif', color='white'),
         xaxis_tickfont=dict(size=12, family='Arial, sans-serif', color='white'),
         yaxis_tickfont=dict(size=12, family='Arial, sans-serif', color='white'),
+                        legend=dict(
+            title_font=dict(size=14, family='Arial, sans-serif', color='white'),
+            font=dict(size=12, family='Arial, sans-serif', color='white')
+        ),
         annotations=[
             dict(
                 x=0.55,
@@ -122,22 +165,26 @@ elif medal_type == "Silver":
             )
         ]
     )
-    fig.update_traces(textfont=dict(family='Arial, sans-serif', size=12, color='black'))
+    fig.update_traces(textfont=dict(family='Arial, sans-serif', size=12, color='white'))
     st.plotly_chart(fig)
 
 elif medal_type == "Bronze":
     filtered_df = df[df['Bronze'] > 0]
     # Create the bar chart for Bronze medals
-    fig = px.bar(filtered_df, x='NOC', y='Bronze', color='NOC', text='Bronze',color_discrete_sequence=px.colors.qualitative.Set1)
+    fig = px.bar(filtered_df, x='NOC', y='Bronze', color='NOC', text='Bronze', color_discrete_sequence=px.colors.qualitative.Set1)
     fig.update_layout(
-      #  title_text=f"{selected_game}: Bronze Medal Count by NOC",
-       # title_font=dict(size=20, family='Arial, sans-serif', color='black'),
+        plot_bgcolor='#8E7D13',  # Background color of the plot area
+        paper_bgcolor='#8E7D13',  # Background color of the whole figure
         xaxis_title='Countries',
         xaxis_title_font=dict(size=18, family='Arial, sans-serif', color='white'),
         yaxis_title='Bronze Medals',
         yaxis_title_font=dict(size=18, family='Arial, sans-serif', color='white'),
         xaxis_tickfont=dict(size=12, family='Arial, sans-serif', color='white'),
         yaxis_tickfont=dict(size=12, family='Arial, sans-serif', color='white'),
+                legend=dict(
+            title_font=dict(size=14, family='Arial, sans-serif', color='white'),
+            font=dict(size=12, family='Arial, sans-serif', color='white')
+        ),
         annotations=[
             dict(
                 x=0.55,
@@ -151,7 +198,7 @@ elif medal_type == "Bronze":
             )
         ]
     )
-    fig.update_traces(textfont=dict(family='Arial, sans-serif', size=12, color='black'))
+    fig.update_traces(textfont=dict(family='Arial, sans-serif', size=12, color='white'))
     st.plotly_chart(fig)
 
 # Display the filtered DataFrame
